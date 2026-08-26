@@ -19,7 +19,7 @@ class Sheet:
 
     def cleaning(self):
         # Drop unneeded columns and null values
-        cols_to_keep = ['Title', "Chart Constant", "Note Count"]
+        cols_to_keep = ['Title',"Difficulty","Chart Constant", "Note Count"]
         self.df = self.df[cols_to_keep].dropna()
 
         # Remove commas from numerical columns
@@ -27,7 +27,7 @@ class Sheet:
         self.df[cols_to_clean] = self.df[cols_to_clean].replace(',', '', regex=True)
 
         # Type casting
-        self.df = self.df.astype({'Title': str,'Chart Constant': float, 'Note Count': int })
+        self.df = self.df.astype({'Title': str,'Difficulty': str, 'Chart Constant': float, 'Note Count': int })
 
 
     def true_random(self,min_constant=0.0,max_constant=14.0,size=1):
@@ -35,6 +35,7 @@ class Sheet:
         # Pick only charts with a suitable constant
         self.df = self.df[self.df["Chart Constant"] >= min_constant]
         self.df = self.df[self.df["Chart Constant"] <= max_constant]
+        size = min(size , len(self.df))
 
         return self.df.sample(n=size)
 
