@@ -29,13 +29,17 @@ You don't really have to install anything. Just use the online version: (Once I'
 
 ### 2. Clone The Repo:
 
-```
+#### Bash:
+
+```bash
 git clone https://github.com/AnasElgamed8/Arcaea-Randomizer
 cd Arcaea-Randomizer/
-python -m venv arcaea-randomizer
+# If you are on Arch, you will have to make a venv
+python -m venv .venv
+# (Or install packages globaly which is a pain. You can figure that out yourself :D)
+source venv/bin/activate
 pip install -r requirements.txt
-streamlit run "/src/app.py"
-
+streamlit run src/app.py
 ```
 and then go to http://localhost:8501/ on your web browser (It should've been opened by default)
 
