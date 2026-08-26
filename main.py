@@ -2,30 +2,44 @@ from pathlib import Path
 
 import pandas as pd
 
-## Get the current directory and access the sheet
+
+class Sheet:
+    def __init__(self,df):
+        self.df = df
+        self.cleaning()
+        # Keep an unmodified version of the cleaned data frame
+        self._original = self.df
+
+    def cleaning(self):
+        # Drop unneeded columns and null values
+        cols_to_keep = ['Title', "Chart Constant", "Note Count"]
+        self.df = self.df[cols_to_keep].dropna()
+
+        # Type casting
+        self.df = self.df.astype({'Title': str,'Chart Constant': float, 'Note Count': int })
+
+
+    def true_random(self,min_constant=0.0,max_constant=14.0,size=1) -> list:
+        self.df = self._original
+        # Pick only charts with a suitable constant
+        self.df = self.df[self.df["Chart Constant"] >= min_constant]
+        self.df = self.df[self.df["Chart Constant"] <= max_constant]
+
+        return self.df.sample(n=size)
+
+
+    def random(self,min_constant=0.0,max_constant=14.0,size=1) -> list:
+        #TODO: Implement a stack to keep track of already displayed charts, And find a way to track the state.
+
+        # Pick only charts with a suitable constant
+        self.df = self.df[self.df["Chart Constant"] >= min_constant]
+        self.df = self.df[self.df["Chart Constant"] <= max_constant]
+
+
+# Get the current directory and access the sheet
 current_dir = Path.cwd()
 data_dir = current_dir / 'data'
-df = pd.read_csv(data_dir / 'scores2.csv')
+df = pd.read_csv(data_dir / 'scores.csv')
 
-## Drop unneeded columns and null values
-cols_to_keep = ['Title', "Chart Constant", "Score", "Note Count", "Play Potential"]
-df = df[cols_to_keep].dropna()
-
-# Data cleaning: drop duplicates
-df = df.drop_duplicates()
-
-# Data cleaning: remove commas ONLY from columns that will become numbers
-# (This prevents accidental removal of commas in your song titles)
-cols_to_clean = ['Score', 'Note Count', 'Chart Constant']
-df[cols_to_clean] = df[cols_to_clean].replace(',', '', regex=True)
-
-# Type casting
-df = df.astype({'Score': int, 'Note Count': int, 'Chart Constant': float})
-
-# Pick only charts with a suitable constant
-max_constant= 10
-min_constant = 9.5
-df = df[df["Chart Constant"] >= min_constant]
-df = df[df["Chart Constant"] <= max_constant]
 # Randomly select and print 1 chart (maintaining the original index number)
 print(df.sample(n=1))
