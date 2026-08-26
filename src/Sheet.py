@@ -6,12 +6,12 @@ import streamlit as st
 
 class Sheet:
     def __init__(self):
-        #TODO: Find a way to automatically pull the latest sheet
+        # TODO: Find a way to automatically pull the latest sheet
 
         # Get the current directory and access the sheet
         project_dir = Path.cwd()
-        data_dir = project_dir / 'data'
-        df = pd.read_csv(data_dir / 'scores.csv')
+        data_dir = project_dir / "data"
+        df = pd.read_csv(data_dir / "scores.csv")
 
         self.df = df.copy()
         self.cleaning()
@@ -20,25 +20,33 @@ class Sheet:
 
     def cleaning(self):
         # Drop unneeded columns and null values
-        cols_to_keep = ['Title',"Difficulty","Chart Constant", "Note Count"]
+        cols_to_keep = ["Title", "Difficulty", "Chart Constant", "Note Count"]
         self.df = self.df[cols_to_keep].dropna()
 
         # Remove commas from numerical columns
-        cols_to_clean = ['Chart Constant','Note Count']
-        self.df[cols_to_clean] = self.df[cols_to_clean].replace(',', '', regex=True)
+        cols_to_clean = ["Chart Constant", "Note Count"]
+        self.df[cols_to_clean] = self.df[cols_to_clean].replace(",", "", regex=True)
 
         # Type casting
-        self.df = self.df.astype({'Title': str,'Difficulty': str, 'Chart Constant': float, 'Note Count': int })
+        self.df = self.df.astype(
+            {
+                "Title": str,
+                "Difficulty": str,
+                "Chart Constant": float,
+                "Note Count": int,
+            }
+        )
 
-        #TODO: Make a parent class for random with the shared behavior, then inherit the class by true random and random
-    def true_random(self,min_constant=1.0,max_constant=12.0,size=1):
+        # TODO: Make a parent class for random with the shared behavior, then inherit the class by true random and random
+
+    def true_random(self, min_constant=1.0, max_constant=12.0, size=1):
         self.df = self._original.copy()
         # Pick only charts with a suitable constant
         self.df = self.df[self.df["Chart Constant"] >= min_constant]
         self.df = self.df[self.df["Chart Constant"] <= max_constant]
 
         df_size = len(self.df)
-        
+
         # Size error handling
         if df_size == 0:
             st.error("No charts fit your current requirements")
@@ -46,12 +54,11 @@ class Sheet:
         elif df_size < size:
             st.warning(f"Note: Only {df_size} chart(s) fit your current requirements.")
 
-        size = min(size , df_size)
+        size = min(size, df_size)
         return self.df.sample(n=size)
 
-
-    def random(self,min_constant=1.0,max_constant=12.0,size=1):
-        #TODO: Implement a stack to keep track of already displayed charts, And find a way to track the state.
+    def random(self, min_constant=1.0, max_constant=12.0, size=1):
+        # TODO: Implement a stack to keep track of already displayed charts, And find a way to track the state.
 
         self.df = self._original.copy()
         # Pick only charts with a suitable constant
