@@ -40,6 +40,7 @@ class Sheet:
         # TODO: Make a parent class for random with the shared behavior, then inherit the class by true random and random
 
     def true_random(self, min_constant=1.0, max_constant=12.0, size=1):
+        # TODO: Add a slot for difficulty selection
         self.df = self._original.copy()
         # Pick only charts with a suitable constant
         self.df = self.df[self.df["Chart Constant"] >= min_constant]
