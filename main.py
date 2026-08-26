@@ -5,10 +5,10 @@ import pandas as pd
 
 class Sheet:
     def __init__(self,df):
-        self.df = df
+        self.df = df.copy()
         self.cleaning()
         # Keep an unmodified version of the cleaned data frame
-        self._original = self.df
+        self._original = self.df.copy()
 
     def cleaning(self):
         # Drop unneeded columns and null values
@@ -23,7 +23,7 @@ class Sheet:
         self.df = self.df.astype({'Title': str,'Chart Constant': float, 'Note Count': int })
 
 
-    def true_random(self,min_constant=0.0,max_constant=14.0,size=1) -> list:
+    def true_random(self,min_constant=0.0,max_constant=14.0,size=1):
         self.df = self._original
         # Pick only charts with a suitable constant
         self.df = self.df[self.df["Chart Constant"] >= min_constant]
@@ -32,9 +32,10 @@ class Sheet:
         return self.df.sample(n=size)
 
 
-    def random(self,min_constant=0.0,max_constant=14.0,size=1) -> list:
+    def random(self,min_constant=0.0,max_constant=14.0,size=1):
         #TODO: Implement a stack to keep track of already displayed charts, And find a way to track the state.
 
+        self.df = self._original
         # Pick only charts with a suitable constant
         self.df = self.df[self.df["Chart Constant"] >= min_constant]
         self.df = self.df[self.df["Chart Constant"] <= max_constant]
@@ -48,4 +49,4 @@ df = pd.read_csv(data_dir / 'scores.csv')
 
 if __name__ == "__main__":
     test = Sheet(df)
-    print(test.true_random())
+    print(test.true_random(10,12,2))
