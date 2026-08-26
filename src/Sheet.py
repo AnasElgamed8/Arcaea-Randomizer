@@ -8,7 +8,7 @@ class Sheet:
         #TODO: Find a way to automatically pull the latest sheet
 
         # Get the current directory and access the sheet
-        project_dir = Path.cwd().parent
+        project_dir = Path.cwd()
         data_dir = project_dir / 'data'
         df = pd.read_csv(data_dir / 'scores.csv')
 
