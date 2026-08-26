@@ -15,6 +15,10 @@ class Sheet:
         cols_to_keep = ['Title', "Chart Constant", "Note Count"]
         self.df = self.df[cols_to_keep].dropna()
 
+        # Remove commas from numerical columns
+        cols_to_clean = ['Chart Constant','Note Count']
+        self.df[cols_to_clean] = self.df[cols_to_clean].replace(',', '', regex=True)
+
         # Type casting
         self.df = self.df.astype({'Title': str,'Chart Constant': float, 'Note Count': int })
 
@@ -35,11 +39,13 @@ class Sheet:
         self.df = self.df[self.df["Chart Constant"] >= min_constant]
         self.df = self.df[self.df["Chart Constant"] <= max_constant]
 
+#TODO: Find a way to automatically pull the latest sheet
 
 # Get the current directory and access the sheet
 current_dir = Path.cwd()
 data_dir = current_dir / 'data'
 df = pd.read_csv(data_dir / 'scores.csv')
 
-# Randomly select and print 1 chart (maintaining the original index number)
-print(df.sample(n=1))
+if __name__ == "__main__":
+    test = Sheet(df)
+    print(test.true_random())
