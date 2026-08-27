@@ -13,11 +13,11 @@ Arcaea's built-in random button is really limited. Every time I use it I get dis
 * Lets you choose the number of charts to pick at a time.
 * Display the note count. along with some other info.
 
-## To Be Added
+## Other Planned Features
 
-* Ability to pick the difficulty.
-* Ability to use your own dataset with your own score.
-* Score and PTT based picks.
+- [X] Ability to pick the difficulty.
+- [ ] Ability to use your own dataset with your own score.
+- [ ] Score and PTT based picks.
 * Currently only supports a true-random mode, planning to add another mode that remembers the previous turns to avoid giving you duplicates.
 * Other things that I had in mind but forgot about them :P
 

@@ -39,16 +39,21 @@ class Sheet:
 
         # TODO: Make a parent class for random with the shared behavior, then inherit the class by true random and random
 
-    def true_random(self, min_constant=1.0, max_constant=12.0, size=1):
-        # TODO: Add a slot for difficulty selection
+    def true_random(self, min_constant=1.0, max_constant=12.0, size=1, difficulty=None):
+
         self.df = self._original.copy()
+
+        if difficulty is not None:
+            df_by_dif = self.df["Difficulty"].isin(difficulty)
+            self.df = self.df[df_by_dif]
+
         # Pick only charts with a suitable constant
         self.df = self.df[self.df["Chart Constant"] >= min_constant]
         self.df = self.df[self.df["Chart Constant"] <= max_constant]
 
+        # Size error handling
         df_size = len(self.df)
 
-        # Size error handling
         if df_size == 0:
             st.error("No charts fit your current requirements")
 
@@ -56,15 +61,18 @@ class Sheet:
             st.warning(f"Note: Only {df_size} chart(s) fit your current requirements.")
 
         size = min(size, df_size)
+
         return self.df.sample(n=size)
 
-    def random(self, min_constant=1.0, max_constant=12.0, size=1):
-        # TODO: Implement a stack to keep track of already displayed charts, And find a way to track the state.
-
-        self.df = self._original.copy()
-        # Pick only charts with a suitable constant
-        self.df = self.df[self.df["Chart Constant"] >= min_constant]
-        self.df = self.df[self.df["Chart Constant"] <= max_constant]
+    # Commented out for now
+    # def random(self, min_constant=1.0, max_constant=12.0, size=1):
+    #     # TODO: Implement a stack to keep track of already displayed charts, And find a way to track the state.
+    #
+    #     self.df = self._original.copy()
+    #     # Pick only charts with a suitable constant
+    #     self.df = self.df[self.df["Chart Constant"] >= min_constant]
+    #     self.df = self.df[self.df["Chart Constant"] <= max_constant]
+    #
 
 
 if __name__ == "__main__":

@@ -4,9 +4,14 @@ from Sheet import Sheet
 from st_social_media_links import SocialMediaIcons
 
 
+# Functions
 @st.cache_resource
 def load_sheet():
     return Sheet()
+
+
+def difficulty_format(dif: str) -> str:
+    return difficulty[dif]
 
 
 @st.cache_data
@@ -20,8 +25,11 @@ def load_icons():
     SocialMediaIcons(social_media_links).render(sidebar=True)
 
 
-test_sheet = load_sheet()
+# Page
 
+# TODO: Move the about section to a md file
+
+# Set the title and about section
 st.set_page_config(
     page_title="Arcaea Randomizer By AnasElgamed8",
     menu_items={
@@ -33,9 +41,13 @@ st.set_page_config(
         \nOr contact me via Discord [@anaselgamed](https://discordapp.com/users/anaselgamed)"""
     },
 )
+
 st.title("Arcaea random chart picker")
 st.sidebar.title("Options")
 
+test_sheet = load_sheet()
+
+# TODO: change to the with method
 left_column, right_column = st.columns(2)
 if st.sidebar.checkbox("Single Value Mode"):
     max_constant = min_constant = left_column.number_input(
@@ -67,9 +79,29 @@ else:
     )
     size = st.number_input("How many charts do you want?", 1)
 
+difficulty = {
+    "PST": "Past",
+    "PRS": "Present",
+    "FTR": "Future",
+    "BYD": "Beyond",
+    "ETR": "Eternal",
+}
+
+
+if st.sidebar.checkbox("Difficulty Selection"):
+    options = st.multiselect(
+        "Select difficulty:",
+        options=difficulty,
+        default=difficulty,
+        format_func=difficulty_format,
+    )
+else:
+    options = None
+# Button trigger
 if st.button("Randomize!", width="stretch", type="primary"):
     st.dataframe(
-        test_sheet.true_random(min_constant, max_constant, size), hide_index=True
+        test_sheet.true_random(min_constant, max_constant, size, options),
+        hide_index=True,
     )
 st.sidebar.divider()
 load_icons()
