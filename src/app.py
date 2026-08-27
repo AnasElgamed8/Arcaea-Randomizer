@@ -89,18 +89,25 @@ difficulty = {
 
 
 if st.sidebar.checkbox("Difficulty Selection"):
-    options = st.multiselect(
+    options = st.pills(
         "Select difficulty:",
         options=difficulty,
+        selection_mode="multi",
         default=difficulty,
         format_func=difficulty_format,
     )
 else:
     options = None
+
 # Button trigger
 if st.button("Randomize!", width="stretch", type="primary"):
     st.dataframe(
-        test_sheet.true_random(min_constant, max_constant, size, options),
+        test_sheet.true_random(
+            min_constant=min_constant,
+            max_constant=max_constant,
+            size=size,
+            difficulty=options,
+        ),
         hide_index=True,
     )
 st.sidebar.divider()
