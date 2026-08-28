@@ -56,6 +56,7 @@ class Sheet:
 
         if df_size == 0:
             st.error("No charts fit your current requirements")
+            return
 
         elif df_size < size:
             st.warning(f"Note: Only {df_size} chart(s) fit your current requirements.")
@@ -64,17 +65,6 @@ class Sheet:
 
         return self.df.sample(n=size)
 
-    # Commented out for now
-    # def random(self, min_constant=1.0, max_constant=12.0, size=1):
-    #     # TODO: Implement a stack to keep track of already displayed charts, And find a way to track the state.
-    #
-    #     self.df = self._original.copy()
-    #     # Pick only charts with a suitable constant
-    #     self.df = self.df[self.df["Chart Constant"] >= min_constant]
-    #     self.df = self.df[self.df["Chart Constant"] <= max_constant]
-    #
-
 
 if __name__ == "__main__":
     sheet = Sheet()
-    print(sheet.true_random())
