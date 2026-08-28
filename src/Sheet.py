@@ -6,12 +6,19 @@ import streamlit as st
 
 class Sheet:
     def __init__(self):
-        # TODO: Find a way to automatically pull the latest sheet
-
-        # Get the current directory and access the sheet
         project_dir = Path.cwd()
         data_dir = project_dir / "data"
-        df = pd.read_csv(data_dir / "scores.csv")
+
+        with open(data_dir / "about.md") as f:
+            self.about = f.read()
+
+        try:
+            df = pd.read_csv(
+                """https://docs.google.com/spreadsheets/d/e/2PACX-1vTpK2YzTTppr13-tjxtEtVgJY0KhRCfOm33-ZagMIVwhrnn_zkHLabd71h9Cvtb8zx_CP_ZXqiP1PtC/pub?gid=697837586&single=true&output=csv"""
+            )
+        except:
+            st.warning("Couldn't access the online sheet. Using the backup sheet")
+            df = pd.read_csv(data_dir / "scores.csv")
 
         self.df = df.copy()
         self._cleaning()

@@ -6,21 +6,25 @@ from st_social_media_links import SocialMediaIcons
 
 # Functions
 @st.cache_resource
-def load_sheet():
+def load_sheet() -> Sheet:
+    """Imports the sheet, about and the random functions"""
     return Sheet()
 
 
 def difficulty_format(dif: str) -> str:
+    """Formats the difficulty options (FTR -> Future)"""
     return difficulty[dif]
 
 
 def reset_pool():
+    """Empties the charts pool to not affect the other queries"""
     if "chart_pool" in st.session_state:
         del st.session_state["chart_pool"]
 
 
 @st.cache_data
 def load_icons():
+    """Loads my social media icons and links"""
     social_media_links = [
         "https://www.youtube.com/@AnasElgamed",
         "https://www.github.com/AnasElgamed8",
@@ -30,25 +34,23 @@ def load_icons():
     SocialMediaIcons(social_media_links).render(sidebar=True)
 
 
+@st.cache_data
+def about() -> str:
+    """Loads the about section"""
+    return data.about
+
+
 # Page
 
-# TODO: Move the about section to a md file
+data = load_sheet()
 
 # Set the title and about section
 st.set_page_config(
     page_title="Arcaea Randomizer By AnasElgamed8",
-    menu_items={
-        "About": """Hello! Anas here.
-        \nI wrote this app because I was bored (lol)
-        \nAnd it's a fun way to implement things I learn along the way.
-        \nHope that it improves your Arcaea experience even by a little!
-        \nIf you find any errors or have any suggestions. Feel free to open an issue on Github.
-        \nOr contact me via Discord [@anaselgamed](https://discordapp.com/users/anaselgamed)"""
-    },
+    menu_items={"About": about()},
 )
 
 st.title("Arcaea random chart picker")
-test_sheet = load_sheet()
 
 left_column, right_column = st.columns(2)
 if st.sidebar.toggle("Multi Value Mode", value=True, on_change=reset_pool()):
@@ -124,7 +126,7 @@ if st.button("Randomize!", width="stretch", type="primary"):
     # True random block
     if true_random:
         st.dataframe(
-            test_sheet.true_random(
+            data.true_random(
                 min_constant=min_constant,
                 max_constant=max_constant,
                 size=size,
@@ -139,7 +141,7 @@ if st.button("Randomize!", width="stretch", type="primary"):
             or st.session_state["random_pool"] is None
             or st.session_state["random_pool"].empty
         ):
-            st.session_state["random_pool"] = test_sheet.random(
+            st.session_state["random_pool"] = data.random(
                 min_constant=min_constant,
                 max_constant=max_constant,
                 size=size,
