@@ -70,7 +70,7 @@ if st.sidebar.toggle("Multi Value Mode", value=True, on_change=reset_pool()):
         key="maxi",
         on_change=reset_pool(),
     )
-    size = st.number_input("How many charts do you want?", 1)
+    size = st.number_input("How many charts do you want?", 1, on_change=reset_pool())
 else:
     max_constant = min_constant = left_column.number_input(
         "Pick the constant:",
@@ -81,7 +81,9 @@ else:
         key="mini",
         on_change=reset_pool(),
     )
-    size = right_column.number_input("How many charts do you want?", 1)
+    size = right_column.number_input(
+        "How many charts do you want?", 1, on_change=reset_pool()
+    )
 
 
 difficulty = {
@@ -93,7 +95,11 @@ difficulty = {
 }
 
 
-if st.sidebar.toggle("Difficulty Selection", value=True):
+if st.sidebar.toggle(
+    "Difficulty Selection",
+    value=True,
+    on_change=reset_pool(),
+):
     options = st.pills(
         "Select difficulty:",
         options=difficulty,
@@ -147,14 +153,14 @@ if st.button("Randomize!", width="stretch", type="primary"):
             pool_size = len(pool)
 
             if pool_size < size:
-                st.warning(
-                    f"Note: Only {pool_size} chart(s) fit your current requirements."
-                )
-
-            size = min(size, pool_size)
+                size = min(size, pool_size)
             sample = pool.sample(n=size)
             st.dataframe(sample, hide_index=True)
             pool.drop(sample.index, inplace=True)
-
             if pool.empty:
                 st.info("You ran out of entries, resetting.")
+            else:
+                st.info(f"{pool_size} chart(s) left.")
+
+
+load_icons()
