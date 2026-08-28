@@ -14,6 +14,11 @@ def difficulty_format(dif: str) -> str:
     return difficulty[dif]
 
 
+def reset_pool():
+    if "chart_pool" in st.session_state:
+        del st.session_state["chart_pool"]
+
+
 @st.cache_data
 def load_icons():
     social_media_links = [
@@ -43,26 +48,13 @@ st.set_page_config(
 )
 
 st.title("Arcaea random chart picker")
-st.sidebar.title("Options")
-
 test_sheet = load_sheet()
 
-# TODO: change to the with method
 left_column, right_column = st.columns(2)
-if st.sidebar.checkbox("Single Value Mode"):
-    max_constant = min_constant = left_column.number_input(
-        "Pick the constant:",
-        step=0.1,
-        min_value=1.0,
-        max_value=12.0,
-        value=1.0,
-        key="mini",
-    )
-    size = right_column.number_input("How many charts do you want?", 1)
-
-else:
+if st.sidebar.toggle("Multi Value Mode", value=True, on_change=reset_pool()):
     min_constant = left_column.number_input(
         "Pick the minimum allowed constant:",
+        on_change=reset_pool(),
         step=0.1,
         min_value=1.0,
         max_value=12.0,
@@ -76,8 +68,21 @@ else:
         max_value=12.0,
         value=12.0,
         key="maxi",
+        on_change=reset_pool(),
     )
     size = st.number_input("How many charts do you want?", 1)
+else:
+    max_constant = min_constant = left_column.number_input(
+        "Pick the constant:",
+        step=0.1,
+        min_value=1.0,
+        max_value=12.0,
+        value=1.0,
+        key="mini",
+        on_change=reset_pool(),
+    )
+    size = right_column.number_input("How many charts do you want?", 1)
+
 
 difficulty = {
     "PST": "Past",
@@ -88,24 +93,29 @@ difficulty = {
 }
 
 
-if st.sidebar.checkbox("Difficulty Selection"):
+if st.sidebar.toggle("Difficulty Selection", value=True):
     options = st.pills(
         "Select difficulty:",
         options=difficulty,
         selection_mode="multi",
         default=difficulty,
         format_func=difficulty_format,
+        on_change=reset_pool(),
     )
 else:
     options = None
 # Random mode selection:
-true_random = st.toggle(
-    "True Random Mode", value=True, help="Whether to allow duplicates across runs"
+true_random = st.sidebar.toggle(
+    "True Random Mode",
+    value=True,
+    help="Whether to allow duplicates across runs",
+    on_change=reset_pool(),
 )
 
 
 # Button trigger
 if st.button("Randomize!", width="stretch", type="primary"):
+    # True random block
     if true_random:
         st.dataframe(
             test_sheet.true_random(
@@ -117,18 +127,34 @@ if st.button("Randomize!", width="stretch", type="primary"):
             hide_index=True,
         )
     else:
-        if "normal_random" in st.session_state:
-            pass
-        else:
-            st.session_state["normal_random"] = test_sheet.random(
+        # Normal random block
+        if (
+            "random_pool" not in st.session_state
+            or st.session_state["random_pool"] is None
+            or st.session_state["random_pool"].empty
+        ):
+            st.session_state["random_pool"] = test_sheet.random(
                 min_constant=min_constant,
                 max_constant=max_constant,
                 size=size,
                 difficulty=options,
             )
-            st.dataframe(
-                st.session_state["normal_random"],
-                hide_index=True,
-            )
-st.sidebar.divider()
-load_icons()
+        # Outside the condition to presist accross reruns
+        pool = st.session_state["random_pool"]
+
+        if pool is not None and not pool.empty:
+            # Size error handling
+            pool_size = len(pool)
+
+            if pool_size < size:
+                st.warning(
+                    f"Note: Only {pool_size} chart(s) fit your current requirements."
+                )
+
+            size = min(size, pool_size)
+            sample = pool.sample(n=size)
+            st.dataframe(sample, hide_index=True)
+            pool.drop(sample.index, inplace=True)
+
+            if pool.empty:
+                st.info("You ran out of enteries, resetting.")
