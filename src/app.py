@@ -139,7 +139,7 @@ if st.button("Randomize!", width="stretch", type="primary"):
                 size=size,
                 difficulty=options,
             )
-        # Outside the condition to presist accross reruns
+        # Outside the condition to persist across reruns
         pool = st.session_state["random_pool"]
 
         if pool is not None and not pool.empty:
@@ -157,4 +157,4 @@ if st.button("Randomize!", width="stretch", type="primary"):
             pool.drop(sample.index, inplace=True)
 
             if pool.empty:
-                st.info("You ran out of enteries, resetting.")
+                st.info("You ran out of entries, resetting.")
