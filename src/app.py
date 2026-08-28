@@ -98,17 +98,37 @@ if st.sidebar.checkbox("Difficulty Selection"):
     )
 else:
     options = None
+# Random mode selection:
+true_random = st.toggle(
+    "True Random Mode", value=True, help="Whether to allow duplicates across runs"
+)
+
 
 # Button trigger
 if st.button("Randomize!", width="stretch", type="primary"):
-    st.dataframe(
-        test_sheet.true_random(
-            min_constant=min_constant,
-            max_constant=max_constant,
-            size=size,
-            difficulty=options,
-        ),
-        hide_index=True,
-    )
+    if true_random:
+        st.dataframe(
+            test_sheet.true_random(
+                min_constant=min_constant,
+                max_constant=max_constant,
+                size=size,
+                difficulty=options,
+            ),
+            hide_index=True,
+        )
+    else:
+        if "normal_random" in st.session_state:
+            pass
+        else:
+            st.session_state["normal_random"] = test_sheet.random(
+                min_constant=min_constant,
+                max_constant=max_constant,
+                size=size,
+                difficulty=options,
+            )
+            st.dataframe(
+                st.session_state["normal_random"],
+                hide_index=True,
+            )
 st.sidebar.divider()
 load_icons()

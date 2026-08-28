@@ -14,11 +14,11 @@ class Sheet:
         df = pd.read_csv(data_dir / "scores.csv")
 
         self.df = df.copy()
-        self.cleaning()
+        self._cleaning()
         # Keep an unmodified version of the cleaned data frame
         self._original = self.df.copy()
 
-    def cleaning(self):
+    def _cleaning(self):
         # Drop unneeded columns and null values
         cols_to_keep = ["Title", "Difficulty", "Chart Constant", "Note Count"]
         self.df = self.df[cols_to_keep].dropna()
@@ -37,22 +37,23 @@ class Sheet:
             }
         )
 
-        # TODO: Make a parent class for random with the shared behavior, then inherit the class by true random and random
-
-    def true_random(self, min_constant=1.0, max_constant=12.0, size=1, difficulty=None):
-
-        self.df = self._original.copy()
+    def _filtered_random_pool(self, min_constant, max_constant, difficulty):
+        pool = self._original.copy()
 
         if difficulty is not None:
-            df_by_dif = self.df["Difficulty"].isin(difficulty)
-            self.df = self.df[df_by_dif]
+            df_by_dif = pool["Difficulty"].isin(difficulty)
+            pool = pool[df_by_dif]
 
         # Pick only charts with a suitable constant
-        self.df = self.df[self.df["Chart Constant"] >= min_constant]
-        self.df = self.df[self.df["Chart Constant"] <= max_constant]
+        pool = pool[pool["Chart Constant"] >= min_constant]
+        pool = pool[pool["Chart Constant"] <= max_constant]
+        return pool
+
+    def true_random(self, min_constant=1.0, max_constant=12.0, size=1, difficulty=None):
+        pool = self._filtered_random_pool(min_constant, max_constant, difficulty)
 
         # Size error handling
-        df_size = len(self.df)
+        df_size = len(pool)
 
         if df_size == 0:
             st.error("No charts fit your current requirements")
@@ -63,7 +64,19 @@ class Sheet:
 
         size = min(size, df_size)
 
-        return self.df.sample(n=size)
+        return pool.sample(n=size)
+
+    def random(self, min_constant=1.0, max_constant=12.0, size=1, difficulty=None):
+        pool = self._filtered_random_pool(min_constant, max_constant, difficulty)
+
+        # Size error handling
+        df_size = len(pool)
+
+        if df_size == 0:
+            st.error("No charts fit your current requirements")
+            return
+
+        return pool
 
 
 if __name__ == "__main__":
