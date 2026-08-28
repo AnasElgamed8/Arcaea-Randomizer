@@ -50,7 +50,11 @@ st.set_page_config(
     menu_items={"About": about()},
 )
 
-st.title("Arcaea random chart picker")
+st.title(
+    "Arcaea random chart picker",
+    text_alignment="center",
+    help="Expand the sidebar for more options!",
+)
 
 left_column, right_column = st.columns(2)
 if st.sidebar.toggle("Multi Value Mode", value=True, on_change=reset_pool()):
@@ -164,5 +168,10 @@ if st.button("Randomize!", width="stretch", type="primary"):
             else:
                 st.info(f"{pool_size} chart(s) left.")
 
+st.sidebar.divider()
+with st.sidebar.expander("About this project"):
+    st.markdown(about(), text_alignment="center")
+
+st.sidebar.markdown("Free Palestine 🇵🇸", text_alignment="center")
 
 load_icons()
