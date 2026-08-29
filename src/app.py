@@ -98,6 +98,7 @@ difficulty = {
     "FTR": "Future",
     "BYD": "Beyond",
     "ETR": "Eternal",
+    "INS": "Inscribed",
 }
 
 
@@ -114,6 +115,8 @@ if st.sidebar.toggle(
         format_func=difficulty_format,
         on_change=reset_pool(),
     )
+    if not options:
+        options = "The user is an idiot"
 else:
     options = None
 # Random mode selection:
@@ -127,8 +130,10 @@ true_random = st.sidebar.toggle(
 
 # Button trigger
 if st.button("Randomize!", width="stretch", type="primary"):
+    if options == "The user is an idiot":
+        st.error("Select a difficulty or disable difficulty selection.")
     # True random block
-    if true_random:
+    elif true_random:
         st.dataframe(
             data.true_random(
                 min_constant=min_constant,

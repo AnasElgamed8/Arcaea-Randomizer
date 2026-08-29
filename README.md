@@ -28,6 +28,14 @@ Arcaea's built-in random button is really limited. Every time I use it I get dis
 
 You don't really have to install anything. Just use the [online version](https://arcaea.anas-elgamed.duckdns.org/)
 
+- The only case where the online version might not be suitable for you would be: 
+restricting the selection pool to only owned charts
+
+In that case, you should do the following:
+
+1. Clone the repo as instructed below.
+2. Replace the spreadsheet link with a link to your own spreadsheet with only your owned charts.
+
 ### 2. Clone The Repo:
 
 #### Bash:
@@ -52,7 +60,7 @@ The dockerfile is already included, though I will add some detailed steps later.
 ## Credits
 
 - [@ayatough](https://github.com/ayatough) for their [VScode Arcaea theme](https://github.com/ayatough/vscode-arcaea-theme/) (That's where I got the colors).
-- []() for their [Arcaea B30 Calculator (community) V2](https://docs.google.com/spreadsheets/d/1RJkupRtpRxxrTrMpb0VwCLZzOU0JtX_jsuo8xUnEO1k/edit?usp=sharing) spreadsheet.
+- [u/Chibu68_](https://www.reddit.com/user/Chibu68_/) for their [Arcaea B30 Calculator (community) V2](https://docs.google.com/spreadsheets/d/1RJkupRtpRxxrTrMpb0VwCLZzOU0JtX_jsuo8xUnEO1k/edit?usp=sharing) spreadsheet.
 - hokandor7 for the making the original spreadsheet.
 ## Notes
 
