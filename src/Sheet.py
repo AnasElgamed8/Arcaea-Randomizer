@@ -6,7 +6,7 @@ import streamlit as st
 
 class Sheet:
     def __init__(self):
-        project_dir = Path.cwd()
+        project_dir = Path(__file__).resolve().parent.parent
         data_dir = project_dir / "data"
 
         with open(data_dir / "about.md") as f:
