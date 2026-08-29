@@ -14,7 +14,7 @@ class Sheet:
 
         try:
             df = pd.read_csv(
-                """https://docs.google.com/spreadsheets/d/e/2PACX-1vTpK2YzTTppr13-tjxtEtVgJY0KhRCfOm33-ZagMIVwhrnn_zkHLabd71h9Cvtb8zx_CP_ZXqiP1PtC/pub?gid=697837586&single=true&output=csv"""
+                """https://docs.google.com/spreadsheets/d/e/2PACX-1vTpK2YzTTppr13-tjxtEtVgJY0KhRCfOm33-ZagMIVwhrnn_zkHLabd71h9Cvtb8zx_CP_ZXqiP1PtC/pub?gid=1548130374&single=true&output=csv"""
             )
         except:
             st.warning("Couldn't access the online sheet. Using the backup sheet")
