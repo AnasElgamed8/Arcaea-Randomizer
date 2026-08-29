@@ -57,10 +57,10 @@ st.title(
 )
 
 left_column, right_column = st.columns(2)
-if st.sidebar.toggle("Multi Value Mode", value=True, on_change=reset_pool()):
+if st.sidebar.toggle("Multi Value Mode", value=True, on_change=reset_pool):
     min_constant = left_column.number_input(
         "Pick the minimum allowed constant:",
-        on_change=reset_pool(),
+        on_change=reset_pool,
         step=0.1,
         min_value=1.0,
         max_value=12.0,
@@ -74,9 +74,9 @@ if st.sidebar.toggle("Multi Value Mode", value=True, on_change=reset_pool()):
         max_value=12.0,
         value=12.0,
         key="maxi",
-        on_change=reset_pool(),
+        on_change=reset_pool,
     )
-    size = st.number_input("How many charts do you want?", 1, on_change=reset_pool())
+    size = st.number_input("How many charts do you want?", 1, on_change=reset_pool)
 else:
     max_constant = min_constant = left_column.number_input(
         "Pick the constant:",
@@ -85,10 +85,10 @@ else:
         max_value=12.0,
         value=1.0,
         key="mini",
-        on_change=reset_pool(),
+        on_change=reset_pool,
     )
     size = right_column.number_input(
-        "How many charts do you want?", 1, on_change=reset_pool()
+        "How many charts do you want?", 1, on_change=reset_pool
     )
 
 
@@ -105,7 +105,7 @@ difficulty = {
 if st.sidebar.toggle(
     "Difficulty Selection",
     value=True,
-    on_change=reset_pool(),
+    on_change=reset_pool,
 ):
     options = st.pills(
         "Select difficulty:",
@@ -113,7 +113,7 @@ if st.sidebar.toggle(
         selection_mode="multi",
         default=difficulty,
         format_func=difficulty_format,
-        on_change=reset_pool(),
+        on_change=reset_pool,
     )
     if not options:
         options = "The user is an idiot"
@@ -124,7 +124,7 @@ true_random = st.sidebar.toggle(
     "True Random Mode",
     value=True,
     help="Whether to allow duplicates across runs",
-    on_change=reset_pool(),
+    on_change=reset_pool,
 )
 
 
@@ -146,18 +146,18 @@ if st.button("Randomize!", width="stretch", type="primary"):
     else:
         # Normal random block
         if (
-            "random_pool" not in st.session_state
-            or st.session_state["random_pool"] is None
-            or st.session_state["random_pool"].empty
+            "chart_pool" not in st.session_state
+            or st.session_state["chart_pool"] is None
+            or st.session_state["chart_pool"].empty
         ):
-            st.session_state["random_pool"] = data.random(
+            st.session_state["chart_pool"] = data.random(
                 min_constant=min_constant,
                 max_constant=max_constant,
                 size=size,
                 difficulty=options,
             )
         # Outside the condition to persist across reruns
-        pool = st.session_state["random_pool"]
+        pool = st.session_state["chart_pool"]
 
         if pool is not None and not pool.empty:
             # Size error handling
