@@ -1,0 +1,14 @@
+[project]
+name = "arcaea-randomizer"
+version = "0.1.0"
+description = "A small web app that picks a random chart for you to play!"
+readme = "README.md"
+authors = [
+    { name = "AnasElgamed8", email = "anashossamhafez@gmail.com" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "pandas>=3.0.5",
+    "st-social-media-links>=0.1.5",
+    "streamlit>=1.62.0",
+]

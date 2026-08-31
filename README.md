@@ -39,15 +39,11 @@ In that case, you should do the following:
 ### 2. Clone The Repo:
 
 #### Bash:
-
 ```bash
+# install git and uv first
 git clone https://github.com/AnasElgamed8/Arcaea-Randomizer
 cd Arcaea-Randomizer/
-# If you are on Arch, you will have to make a venv
-python -m venv .venv
-source .venv/bin/activate
-# (Or install packages globally which is a pain. You can figure that out yourself :D)
-pip install -r requirements.txt
+uv sync
 streamlit run src/app.py
 ```
 and then go to http://localhost:8501/ on your web browser (It should've been opened by default)
@@ -61,7 +57,7 @@ The dockerfile is already included, though I will add some detailed steps later.
 
 - [@ayatough](https://github.com/ayatough) for their [VScode Arcaea theme](https://github.com/ayatough/vscode-arcaea-theme/) (That's where I got the colors).
 - [u/Chibu68_](https://www.reddit.com/user/Chibu68_/) for their [Arcaea B30 Calculator (community) V2](https://docs.google.com/spreadsheets/d/1RJkupRtpRxxrTrMpb0VwCLZzOU0JtX_jsuo8xUnEO1k/edit?usp=sharing) spreadsheet.
-- hokandor7 for the making the original spreadsheet.
+- hokandor7 for making the original spreadsheet.
 ## Notes
 
 Feel free to open a pull request if you have anything you want to add.
