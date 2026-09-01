@@ -1,6 +1,6 @@
 [project]
 name = "arcaea-randomizer"
-version = "0.2.2"
+version = "0.2.3"
 description = "A small web app that picks a random chart for you to play!"
 readme = "README.md"
 authors = [
@@ -9,6 +9,7 @@ authors = [
 requires-python = ">=3.11"
 dependencies = [
     "pandas>=3.0.5",
+    "requests>=2.34.2",
     "st-social-media-links>=0.1.5",
     "streamlit>=1.62.0",
 ]
