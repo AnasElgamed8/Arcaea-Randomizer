@@ -19,7 +19,8 @@ class Sheet:
         except:
             st.warning("Couldn't access the online sheet. Using the backup sheet")
             df = pd.read_csv(data_dir / "scores.csv")
-
+        # idk man, I won't even try to calculate it
+        self.max_ptt = 14.000
         self.df = df.copy()
         self._cleaning()
         # Keep an unmodified version of the cleaned data frame
@@ -44,6 +45,14 @@ class Sheet:
             }
         )
 
+    @property
+    def ptt(self):
+        return self._ptt
+
+    @ptt.setter
+    def ptt(self, value=-1.0):
+        self._ptt = value
+
     def _filtered_random_pool(self, min_constant, max_constant, difficulty):
         pool = self._original.copy()
 
@@ -51,9 +60,12 @@ class Sheet:
             df_by_dif = pool["Difficulty"].isin(difficulty)
             pool = pool[df_by_dif]
 
-        # Pick only charts with a suitable constant
-        pool = pool[pool["Chart Constant"] >= min_constant]
-        pool = pool[pool["Chart Constant"] <= max_constant]
+        if self.ptt >= 0:
+            pool = pool[pool["Chart Constant"] > (self.ptt - 2.200)]
+        else:
+            # Pick only charts with a suitable constant
+            pool = pool[pool["Chart Constant"] >= min_constant]
+            pool = pool[pool["Chart Constant"] <= max_constant]
         return pool
 
     def true_random(self, min_constant=1.0, max_constant=12.0, size=1, difficulty=None):

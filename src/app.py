@@ -41,7 +41,7 @@ def about() -> str:
 
 
 # Page
-
+version = "0.2"
 data = load_sheet()
 
 # Set the title and about section
@@ -49,7 +49,7 @@ st.set_page_config(
     page_title="Arcaea Randomizer By AnasElgamed8",
     menu_items={"About": about()},
 )
-
+# Page title
 st.title(
     "Arcaea random chart picker",
     text_alignment="center",
@@ -57,39 +57,66 @@ st.title(
 )
 
 left_column, right_column = st.columns(2)
-if st.sidebar.toggle("Multi Value Mode", value=True, on_change=reset_pool):
-    min_constant = left_column.number_input(
-        "Pick the minimum allowed constant:",
-        on_change=reset_pool,
+st.sidebar.markdown("# Arcaea Randomizer", text_alignment="center")
+st.sidebar.markdown(f"V{version}", text_alignment="center")
+st.sidebar.divider()
+st.sidebar.markdown("# Options")
+
+if st.sidebar.toggle(
+    "Potential Mode",
+    help="Only lists charts with a possible play rating above your potential",
+):
+    data.ptt = left_column.number_input(
+        "Enter Your Potential:",
         step=0.1,
-        min_value=1.0,
-        max_value=12.0,
-        value=1.0,
-        key="mini",
-    )
-    max_constant = right_column.number_input(
-        "Pick the maximum allowed constant:",
-        step=0.1,
-        min_value=min_constant,
-        max_value=12.0,
-        value=12.0,
-        key="maxi",
+        min_value=0.000,
+        max_value=data.max_ptt,
+        value=0.000,
         on_change=reset_pool,
-    )
-    size = st.number_input("How many charts do you want?", 1, on_change=reset_pool)
-else:
-    max_constant = min_constant = left_column.number_input(
-        "Pick the constant:",
-        step=0.1,
-        min_value=1.0,
-        max_value=12.0,
-        value=1.0,
-        key="mini",
-        on_change=reset_pool,
+        format="%0.3f",
     )
     size = right_column.number_input(
         "How many charts do you want?", 1, on_change=reset_pool
     )
+    min_constant = 1
+    max_constant = 12
+    with st.bottom.expander("More about potential mode", type="default"):
+        st.markdown("""wip""")
+else:
+    data.ptt = -1
+    if st.sidebar.toggle("Multi Value Mode", value=True, on_change=reset_pool):
+        min_constant = left_column.number_input(
+            "Pick the minimum allowed constant:",
+            on_change=reset_pool,
+            step=0.1,
+            min_value=1.0,
+            max_value=12.0,
+            value=1.0,
+            key="mini",
+        )
+        max_constant = right_column.number_input(
+            "Pick the maximum allowed constant:",
+            step=0.1,
+            min_value=min_constant,
+            max_value=12.0,
+            value=12.0,
+            key="maxi",
+            on_change=reset_pool,
+        )
+        size = st.number_input("How many charts do you want?", 1, on_change=reset_pool)
+    else:
+        max_constant = min_constant = left_column.number_input(
+            "Pick the constant:",
+            step=0.1,
+            min_value=1.0,
+            max_value=12.0,
+            value=1.0,
+            key="mini",
+            on_change=reset_pool,
+        )
+        size = right_column.number_input(
+            "How many charts do you want?", 1, on_change=reset_pool
+        )
 
 
 difficulty = {
@@ -176,7 +203,6 @@ if st.button("Randomize!", width="stretch", type="primary"):
 st.sidebar.divider()
 with st.sidebar.expander("About this project"):
     st.markdown(about(), text_alignment="center")
-
 st.sidebar.markdown("Free Palestine 🇵🇸", text_alignment="center")
 
 load_icons()
