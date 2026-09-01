@@ -1,6 +1,6 @@
 [project]
 name = "arcaea-randomizer"
-version = "0.1.0"
+version = "0.2.1"
 description = "A small web app that picks a random chart for you to play!"
 readme = "README.md"
 authors = [

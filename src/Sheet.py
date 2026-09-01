@@ -12,6 +12,8 @@ class Sheet:
         with open(data_dir / "about.md") as f:
             self.about = f.read()
 
+        with open(data_dir / "about_ptt.md") as f:
+            self.about_ptt = f.read()
         try:
             df = pd.read_csv(
                 """https://docs.google.com/spreadsheets/d/e/2PACX-1vTpK2YzTTppr13-tjxtEtVgJY0KhRCfOm33-ZagMIVwhrnn_zkHLabd71h9Cvtb8zx_CP_ZXqiP1PtC/pub?gid=1548130374&single=true&output=csv"""

@@ -17,8 +17,9 @@ Arcaea's built-in random button is really limited. Every time I use it I get dis
 
 - [X] Ability to pick the difficulty.
 - [X] No-duplicates mode (Turn true random off)
+- [X] PTT based picks
 - [ ] Ability to use your own dataset with your own score.
-- [ ] Score and PTT based picks.
+- [ ] Score based picks.
 - [ ] Cool Arcaea themed backgrounds (When I eventually learn to draw lol)
 * Other things that I had in mind but forgot about them :P
 
@@ -44,7 +45,7 @@ In that case, you should do the following:
 git clone https://github.com/AnasElgamed8/Arcaea-Randomizer
 cd Arcaea-Randomizer/
 uv sync
-streamlit run src/app.py
+uv run streamlit run src/app.py
 ```
 and then go to http://localhost:8501/ on your web browser (It should've been opened by default)
 

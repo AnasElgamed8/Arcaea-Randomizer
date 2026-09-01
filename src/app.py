@@ -40,8 +40,14 @@ def about() -> str:
     return data.about
 
 
+@st.cache_data
+def about_ptt() -> str:
+    """Loads the about section for potential mode"""
+    return data.about_ptt
+
+
 # Page
-version = "0.2"
+version = "0.2.1"
 data = load_sheet()
 
 # Set the title and about section
@@ -81,7 +87,7 @@ if st.sidebar.toggle(
     min_constant = 1
     max_constant = 12
     with st.bottom.expander("More about potential mode", type="default"):
-        st.markdown("""wip""")
+        st.markdown(about_ptt())
 else:
     data.ptt = -1
     if st.sidebar.toggle("Multi Value Mode", value=True, on_change=reset_pool):
