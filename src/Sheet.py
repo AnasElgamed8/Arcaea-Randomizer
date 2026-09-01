@@ -2,6 +2,8 @@ from pathlib import Path
 
 import pandas as pd
 import streamlit as st
+import requests
+import io
 
 
 class Sheet:
@@ -14,11 +16,18 @@ class Sheet:
 
         with open(data_dir / "about_ptt.md") as f:
             self.about_ptt = f.read()
+        google_sheet = """https://docs.google.com/spreadsheets/d/e/2PACX-1vTpK2YzTTppr13-tjxtEtVgJY0KhRCfOm33-ZagMIVwhrnn_zkHLabd71h9Cvtb8zx_CP_ZXqiP1PtC/pub?gid=1548130374&single=true&output=csv"""
+
         try:
-            df = pd.read_csv(
-                """https://docs.google.com/spreadsheets/d/e/2PACX-1vTpK2YzTTppr13-tjxtEtVgJY0KhRCfOm33-ZagMIVwhrnn_zkHLabd71h9Cvtb8zx_CP_ZXqiP1PtC/pub?gid=1548130374&single=true&output=csv"""
-            )
-        except:
+            blob = requests.get(google_sheet, timeout=5)
+            blob.raise_for_status()
+            sheet = io.StringIO(blob.text)
+            df = pd.read_csv(sheet)
+        except requests.exceptions.Timeout:
+            st.warning("The online sheet timed out. Using the backup sheet")
+            df = pd.read_csv(data_dir / "scores.csv")
+
+        except requests.exceptions.RequestException:
             st.warning("Couldn't access the online sheet. Using the backup sheet")
             df = pd.read_csv(data_dir / "scores.csv")
         # idk man, I won't even try to calculate it

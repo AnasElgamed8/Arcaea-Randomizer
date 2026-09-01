@@ -47,7 +47,7 @@ def about_ptt() -> str:
 
 
 # Page
-version = "0.2.1"
+version = "0.2.2"
 data = load_sheet()
 
 # Set the title and about section
